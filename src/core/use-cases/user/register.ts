@@ -8,10 +8,12 @@ export type OutsideRegister<A> = (data: CreateUser) => Promise<A>;
 export type Register = <A>(outsideRegister: OutsideRegister<A>) =>
   (data: CreateUser) => TE.TaskEither<Error, A>
 
-export const register: Register = (outsideRegister) => (data) => {
-  return pipe(
-    TE.tryCatch(
-      () => outsideRegister(data),
-      E.toError),
-  )
-}
+export const register: Register = (outsideRegister) =>
+  (data) => {
+    return pipe(
+      TE.tryCatch(
+        () => outsideRegister(data),
+        E.toError,
+      ),
+    )
+  }
