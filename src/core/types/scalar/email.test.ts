@@ -1,13 +1,12 @@
 import { emailCodec } from './email'
-import * as E from 'fp-ts/lib/Either'
 import { pipe } from 'fp-ts/lib/function'
+import { mapAllE } from '@/config/fixtures'
 
 it('Deveria validar o email corretamente', () => {
   pipe(
     'valid@email.com',
     emailCodec.decode,
-    E.map(result => expect(result).toBe('valid@email.com')),
-    E.mapLeft(result => expect(result).toBe('valid@email.com')),
+    mapAllE(result => expect(result).toBe('valid@email.com')),
   )
 })
 
@@ -15,6 +14,11 @@ it('Deveria retornar um erro quando o email for inválido', () => {
   pipe(
     'bruno-bruno.com',
     emailCodec.decode,
-    E.mapLeft(error => expect(error[0]?.message).toBe('Email inválido')),
+    mapAllE(error => {
+      if (Array.isArray(error)) {
+        // eslint-disable-next-line jest/no-conditional-expect
+        expect(error[0]?.message).toBe('Email inválido')
+      }
+    }),
   )
 })
