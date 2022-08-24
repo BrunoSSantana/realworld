@@ -17,10 +17,8 @@ it('Deveria retornar um erro quando o url for inválido', () => {
     urlInvalid,
     urlCodec.decode,
     mapAllE(error => {
-      if (Array.isArray(error)) {
-        // eslint-disable-next-line jest/no-conditional-expect
-        expect(error[0]?.message).toBe('Url inválida')
-      }
+      const errorMessage = Array.isArray(error) ? error[0]?.message : ''
+      expect(errorMessage).toBe('Url inválida')
     }),
   )
 })

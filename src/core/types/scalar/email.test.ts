@@ -15,10 +15,8 @@ it('Deveria retornar um erro quando o email for inválido', () => {
     'bruno-bruno.com',
     emailCodec.decode,
     mapAllE(error => {
-      if (Array.isArray(error)) {
-        // eslint-disable-next-line jest/no-conditional-expect
-        expect(error[0]?.message).toBe('Email inválido')
-      }
+      const errorMessage = Array.isArray(error) ? error[0]?.message : ''
+      expect(errorMessage).toBe('Email inválido')
     }),
   )
 })
