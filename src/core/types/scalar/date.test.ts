@@ -1,25 +1,41 @@
-import { dateCodec } from './date'
 import { pipe } from 'fp-ts/lib/function'
-import { mapAllE } from '@/config/fixtures'
+import * as TE from 'fp-ts/lib/TaskEither'
+import { getErrorMessage, mapAll } from '@/config/fixtures'
+import { dateCodec } from './date'
 
-it('Deveria validar o date corretamente', () => {
+it('Deveria validar o date corretamente', async () => {
   const data = new Date().toISOString()
 
-  pipe(
+  return pipe(
     data,
     dateCodec.decode,
-    mapAllE(result => expect(result).toBe(data)),
-  )
+    TE.fromEither,
+    mapAll(result => expect(result).toBe(data)),
+  )()
 })
 
-it('Deveria retornar um erro quando o date for inválido', () => {
-  const dataInvalida = '2020-01-01T00:00:00.000'
-  pipe(
+it('Deveria retornar um erro quando o date for mandado eu outro formato', async () => {
+  const dataInvalida = '10/10/2020'
+
+  return pipe(
     dataInvalida,
     dateCodec.decode,
-    mapAllE(error => {
-      const errorMessage = Array.isArray(error) ? error[0]?.message : ''
-      expect(errorMessage).toBe('Data inválida, use o formato ISO 8601')
-    }),
-  )
+    TE.fromEither,
+    mapAll(error =>
+      expect(getErrorMessage(error)).toBe('Data inválida, use o formato ISO 8601'),
+    ),
+  )()
+})
+
+it('Deveria retornar um erro quando o date for inválido', async () => {
+  const dataInvalida = '2020-01-01T00:00:00.000'
+
+  return pipe(
+    dataInvalida,
+    dateCodec.decode,
+    TE.fromEither,
+    mapAll(error =>
+      expect(getErrorMessage(error)).toBe('Data inválida, use o formato ISO 8601'),
+    ),
+  )()
 })

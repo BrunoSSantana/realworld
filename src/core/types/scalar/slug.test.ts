@@ -1,88 +1,91 @@
-import { slugCodec } from './slug'
 import { pipe } from 'fp-ts/lib/function'
-import { mapAllE } from '@/config/fixtures'
+import * as TE from 'fp-ts/lib/TaskEither'
+import { getErrorMessage, mapAll } from '@/config/fixtures'
+import { slugCodec } from './slug'
 
-it('Deveria validar o slug corretamente', () => {
+it('Deveria validar o slug corretamente', async () => {
   const slug = 'minha-slug-from-test'
 
-  pipe(
+  return pipe(
     slug,
     slugCodec.decode,
-    mapAllE(result => expect(result).toBe(slug)),
-  )
+    TE.fromEither,
+    mapAll(result => expect(result).toBe(slug)),
+  )()
 })
 
-it('Deveria retornar um erro quando o slug iniciar o traço', () => {
+it('Deveria retornar um erro quando o slug iniciar o traço', async () => {
   const slugInvalid = '-123'
 
-  pipe(
+  return pipe(
     slugInvalid,
     slugCodec.decode,
-    mapAllE(error => {
-      const errorMessage = Array.isArray(error) ? error[0]?.message : ''
-      expect(errorMessage).toBe('Slug inválido, use apenas letras, números e traços')
-    }),
-  )
+    TE.fromEither,
+    mapAll(error =>
+      expect(getErrorMessage(error)).toBe('Slug inválido, use apenas letras, números e traços'),
+    ),
+  )()
 })
 
-it('Deveria retornar um erro quando o slug iniciar número', () => {
+it('Deveria retornar um erro quando o slug iniciar número', async () => {
   const slugInvalid = '1-slug'
 
-  pipe(
+  return pipe(
     slugInvalid,
     slugCodec.decode,
-    mapAllE(error => {
-      const errorMessage = Array.isArray(error) ? error[0]?.message : ''
-      expect(errorMessage).toBe('Slug inválido, use apenas letras, números e traços')
-    }),
-  )
+    TE.fromEither,
+    mapAll(error =>
+      expect(getErrorMessage(error)).toBe('Slug inválido, use apenas letras, números e traços'),
+    ),
+  )()
 })
 
-it('Deveria retornar um erro quando o slug finalizar com traço', () => {
+it('Deveria retornar um erro quando o slug finalizar com traço', async () => {
   const slugInvalid = 'slug-incorrect-'
 
-  pipe(
+  return pipe(
     slugInvalid,
     slugCodec.decode,
-    mapAllE(error => {
-      const errorMessage = Array.isArray(error) ? error[0]?.message : ''
-      expect(errorMessage).toBe('Slug inválido, use apenas letras, números e traços')
-    }),
-  )
+    TE.fromEither,
+    mapAll(error =>
+      expect(getErrorMessage(error)).toBe('Slug inválido, use apenas letras, números e traços'),
+    ),
+  )()
 })
 
-it('Deveria retornar um erro quando o slug possuir letras maiúsculas', () => {
+it('Deveria retornar um erro quando o slug possuir letras maiúsculas', async () => {
   const slugInvalid = 'SlugIncorrect'
 
-  pipe(
+  return pipe(
     slugInvalid,
     slugCodec.decode,
-    mapAllE(error => {
-      const errorMessage = Array.isArray(error) ? error[0]?.message : ''
-      expect(errorMessage).toBe('Slug inválido, use apenas letras, números e traços')
-    }),
-  )
+    TE.fromEither,
+    mapAll(error =>
+      expect(getErrorMessage(error)).toBe('Slug inválido, use apenas letras, números e traços'),
+    ),
+  )()
 })
 
-it('Deveria aceitar um slug com menos de 3 caracteres', () => {
+it('Deveria aceitar um slug com menos de 3 caracteres', async () => {
   const slugInvalid = 'ok'
 
-  pipe(
+  return pipe(
     slugInvalid,
     slugCodec.decode,
-    mapAllE(error => {
-      const errorMessage = Array.isArray(error) ? error[0]?.message : ''
-      expect(errorMessage).toBe('Slug inválido, use apenas letras, números e traços')
-    }),
-  )
+    TE.fromEither,
+    mapAll(error =>
+      expect(getErrorMessage(error)).toBe('Slug inválido, use apenas letras, números e traços'),
+    ),
+  )()
 })
 
-it('Deveria aceitar um slug com 3 caracteres', () => {
+it('Deveria aceitar um slug com 3 caracteres', async () => {
   const slug = 'vai'
 
-  pipe(
+  return pipe(
     slug,
     slugCodec.decode,
-    mapAllE(result => expect(result).toBe(slug)),
-  )
+    TE.fromEither,
+    mapAll(result => expect(result).toBe(slug)),
+  )()
 })

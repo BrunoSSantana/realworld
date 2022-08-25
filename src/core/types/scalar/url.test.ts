@@ -1,24 +1,27 @@
-import { urlCodec } from './url'
 import { pipe } from 'fp-ts/lib/function'
-import { mapAllE } from '@/config/fixtures'
+import * as TE from 'fp-ts/lib/TaskEither'
+import { getErrorMessage, mapAll } from '@/config/fixtures'
+import { urlCodec } from './url'
 
-it('Deveria validar o url corretamente', () => {
+it('Deveria validar o url corretamente', async () => {
   const url = 'https://www.google.com'
-  pipe(
+
+  return pipe(
     url,
     urlCodec.decode,
-    mapAllE(result => expect(result).toBe(url)),
-  )
+    TE.fromEither,
+    mapAll(result => expect(result).toBe(url)),
+  )()
 })
 
 it('Deveria retornar um erro quando o url for inválido', () => {
   const urlInvalid = 'wwwgoogle.com'
-  pipe(
+
+  return pipe(
     urlInvalid,
     urlCodec.decode,
-    mapAllE(error => {
-      const errorMessage = Array.isArray(error) ? error[0]?.message : ''
-      expect(errorMessage).toBe('Url inválida')
-    }),
-  )
+    TE.fromEither,
+    mapAll(error => expect(getErrorMessage(error)).toBe('Url inválida'),
+    ),
+  )()
 })
