@@ -22,7 +22,7 @@ it('Deveria retornar um erro quando o slug iniciar o traço', async () => {
     slugCodec.decode,
     TE.fromEither,
     mapAll(error =>
-      expect(getErrorMessage(error)).toBe('Slug inválido, use apenas letras, números e traços e 3 ou mais caracteres'),
+      expect(getErrorMessage(error)).toBe('Slug inválido, use apenas letras minúsculas, números e traços com 3 ou mais caracteres'),
     ),
   )()
 })
@@ -35,7 +35,7 @@ it('Deveria retornar um erro quando o slug iniciar número', async () => {
     slugCodec.decode,
     TE.fromEither,
     mapAll(error =>
-      expect(getErrorMessage(error)).toBe('Slug inválido, use apenas letras, números e traços e 3 ou mais caracteres'),
+      expect(getErrorMessage(error)).toBe('Slug inválido, use apenas letras minúsculas, números e traços com 3 ou mais caracteres'),
     ),
   )()
 })
@@ -48,7 +48,7 @@ it('Deveria retornar um erro quando o slug finalizar com traço', async () => {
     slugCodec.decode,
     TE.fromEither,
     mapAll(error =>
-      expect(getErrorMessage(error)).toBe('Slug inválido, use apenas letras, números e traços e 3 ou mais caracteres'),
+      expect(getErrorMessage(error)).toBe('Slug inválido, use apenas letras minúsculas, números e traços com 3 ou mais caracteres'),
     ),
   )()
 })
@@ -61,7 +61,7 @@ it('Deveria retornar um erro quando o slug possuir letras maiúsculas', async ()
     slugCodec.decode,
     TE.fromEither,
     mapAll(error =>
-      expect(getErrorMessage(error)).toBe('Slug inválido, use apenas letras, números e traços e 3 ou mais caracteres'),
+      expect(getErrorMessage(error)).toBe('Slug inválido, use apenas letras minúsculas, números e traços com 3 ou mais caracteres'),
     ),
   )()
 })
@@ -74,7 +74,7 @@ it('Não deveria aceitar um slug com menos de 3 caracteres', async () => {
     slugCodec.decode,
     TE.fromEither,
     mapAll(error =>
-      expect(getErrorMessage(error)).toBe('Slug inválido, use apenas letras, números e traços e 3 ou mais caracteres'),
+      expect(getErrorMessage(error)).toBe('Slug inválido, use apenas letras minúsculas, números e traços com 3 ou mais caracteres'),
     ),
   )()
 })

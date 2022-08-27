@@ -52,7 +52,7 @@ it('Não deveria cadastrar um usuário com usuário inválido', async () => {
     register(registerOk),
     mapAll(error =>
       expect(error).toEqual(
-        new Error('Slug inválido, use apenas letras, números e traços e 3 ou mais caracteres'),
+        new Error('Slug inválido, use apenas letras minúsculas, números e traços com 3 ou mais caracteres'),
       ),
     ),
   )()

@@ -1,28 +1,21 @@
 import express from 'express'
 import { pipe } from 'fp-ts/lib/function'
 import * as TE from 'fp-ts/lib/TaskEither'
-import { OutsideRegisterType, register } from '@/adapters/user/register-adapter'
+import { register } from '@/adapters/use-cases/user/register-adapter'
+import { userRegister } from '@/adapters/ports/db'
 
 const app = express()
-const PORT = 3333
+const PORT = process.env.PORT
 
 // middlewares
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-// outside faker
-const outsideRegister: OutsideRegisterType = async (data) => {
-  return {
-    sucess: true,
-    data,
-  }
-}
-
 // routes
 app.post('/api/users', async (req, res) => {
   return pipe(
     req.body.user,
-    register(outsideRegister),
+    register(userRegister),
     TE.map(user => res.status(201).json(user)),
     TE.mapLeft(err => res.status(400).json({ status: 400, message: err.message }),
     ),

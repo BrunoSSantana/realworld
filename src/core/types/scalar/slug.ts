@@ -15,7 +15,7 @@ export const slugCodec = withMessage(
     (slug): slug is t.Branded<string, SlugBrand> => isSlug(slug),
     'Slug',
   ),
-  () => 'Slug inválido, use apenas letras, números e traços e 3 ou mais caracteres',
+  () => 'Slug inválido, use apenas letras minúsculas, números e traços com 3 ou mais caracteres',
 )
 
 export type Slug = t.TypeOf<typeof slugCodec>
