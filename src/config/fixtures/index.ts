@@ -1,9 +1,17 @@
-import { Email } from '@/core/types/scalar'
+import { Email, Password, Slug } from '@/core/types/scalar'
 import { pipe } from 'fp-ts/lib/function'
 import * as TE from 'fp-ts/lib/TaskEither'
 
 export function unsafeEmail (email: string): Email {
   return email as any
+}
+
+export function unsafeSlug (slug: string): Slug {
+  return slug as any
+}
+
+export function unsafePassword (password: string): Password {
+  return password as any
 }
 
 type CallBack = (input: unknown) => unknown

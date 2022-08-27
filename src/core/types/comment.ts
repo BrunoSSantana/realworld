@@ -1,11 +1,12 @@
 import * as t from 'io-ts'
 import { profileCodec } from '@/core/types/profile'
+import { dateCodec } from './scalar'
 
 export const commentCodec = t.type({
   id: t.number,
+  createdAt: dateCodec,
+  updatedAt: dateCodec,
   body: t.string,
-  createdAt: t.string,
-  updatedAt: t.string,
   author: profileCodec,
 })
 

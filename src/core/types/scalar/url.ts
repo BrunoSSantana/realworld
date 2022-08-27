@@ -1,14 +1,18 @@
+import { constFalse, constTrue, pipe } from 'fp-ts/lib/function'
 import * as t from 'io-ts'
+import * as E from 'fp-ts/lib/Either'
 import { withMessage } from 'io-ts-types'
 
-function isUrl (input: string): boolean {
-  try {
-    const url = new URL(typeof input === 'string' ? input : '')
+const validString = (input: unknown) => typeof input === 'string' ? input : ''
 
-    return !!url
-  } catch {
-    return false
-  }
+function isUrl (input: string): boolean {
+  return pipe(
+    E.tryCatch(
+      () => new URL(validString(input)),
+      E.toError,
+    ),
+    E.fold(constFalse, constTrue),
+  )
 }
 
 type UrlBrand = {
