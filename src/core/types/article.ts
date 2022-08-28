@@ -24,3 +24,20 @@ export const articlesCodec = t.type({
 })
 
 export type Articles = t.TypeOf<typeof articlesCodec>
+
+export const createArticleRequired = t.type({
+  title: t.string,
+  description: t.string,
+  body: t.string,
+})
+
+export const createArticlePartial = t.partial({
+  taglist: t.array(tagCodec),
+})
+
+export const createArticleCodec = t.intersection([
+  createArticleRequired,
+  createArticlePartial,
+])
+
+export type CreateArticle = t.TypeOf<typeof createArticleCodec>
