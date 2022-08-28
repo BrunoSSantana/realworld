@@ -1,5 +1,5 @@
 import { CreateUser } from '@/core/types/user'
-import { OutsideRegister, register } from './register'
+import { OutsideRegister, register } from './register-user'
 import { pipe } from 'fp-ts/lib/function'
 import { mapAll, unsafeEmail, unsafePassword, unsafeSlug } from '@/config/fixtures'
 
