@@ -17,7 +17,7 @@ app.post('/api/users', async (req, res) => {
     req.body.user,
     register(userRegister),
     TE.map(user => res.status(201).json(user)),
-    TE.mapLeft(err => res.status(400).json({ status: 400, message: err.message }),
+    TE.mapLeft(err => res.status(422).json(getError(err.message)),
     ),
   )()
 })
@@ -26,3 +26,11 @@ app.post('/api/users', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`)
 })
+
+function getError (erros: string) {
+  return {
+    errors: {
+      body: erros.split(':::'),
+    },
+  }
+}
