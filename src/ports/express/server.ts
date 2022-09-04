@@ -4,9 +4,10 @@ import * as TE from 'fp-ts/lib/TaskEither'
 import { registerUser } from '@/adapters/use-cases/user/register-user-adapter'
 import { createArticleInDB, createUserInDB } from '@/adapters/ports/db'
 import { registerArticle } from '@/core/use-cases/article/register-article'
+import { env } from '@/helper'
 
 const app = express()
-const PORT = process.env.PORT
+const PORT = env('PORT')
 
 // middlewares
 app.use(express.json())
