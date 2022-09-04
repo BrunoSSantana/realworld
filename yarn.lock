@@ -3451,6 +3451,11 @@
   "resolved" "https://registry.npmjs.org/slash/-/slash-3.0.0.tgz"
   "version" "3.0.0"
 
+"slugify@1.6.5":
+  "integrity" "sha512-8mo9bslnBO3tr5PEVFzMPIWwWnipGS0xVbYf65zxDqfNwmzYn1LpiKNrR6DlClusuvo+hDHd1zKpmfAe83NQSQ=="
+  "resolved" "https://registry.npmjs.org/slugify/-/slugify-1.6.5.tgz"
+  "version" "1.6.5"
+
 "source-map-support@0.5.13":
   "integrity" "sha512-SHSKFHadjVA5oR4PPqhtAVdcBWwRYVd6g6cAXnIbRiIwc2EhPrTuKUBdSLvlEKyIP3GCf89fltvcZiP9MMFA1w=="
   "resolved" "https://registry.npmjs.org/source-map-support/-/source-map-support-0.5.13.tgz"

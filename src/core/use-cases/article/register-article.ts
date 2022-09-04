@@ -6,7 +6,7 @@ import { pipe } from 'fp-ts/lib/function'
 import { validateArticle } from './validate-article'
 
 export type OutsideRegister<A> = (data: CreateArticle) => Promise<A>
-type RegisterArticle = <A>(outsideRegister: OutsideRegister<A>) =>
+export type RegisterArticle = <A>(outsideRegister: OutsideRegister<A>) =>
   (data: CreateArticle) => TE.TaskEither<Error, A>
 
 export const registerArticle: RegisterArticle = (outsideRegister) => (data) => {
