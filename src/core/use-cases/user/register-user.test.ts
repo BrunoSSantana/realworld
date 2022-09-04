@@ -1,5 +1,5 @@
 import { CreateUser } from '@/core/types/user'
-import { OutsideRegister, register } from './register-user'
+import { OutsideRegister, registerUser } from './register-user'
 import { pipe } from 'fp-ts/lib/function'
 import { mapAll, unsafeEmail, unsafePassword, unsafeSlug } from '@/config/fixtures'
 
@@ -41,7 +41,7 @@ const dataWithWrongEmailPassword: CreateUser = {
 it('Deveria cadastrar um usuário com sucesso', async () => {
   return pipe(
     data,
-    register(registerOk),
+    registerUser(registerOk),
     mapAll(result => expect(result).toBe(`Usuário ${data.username} cadastrado com sucesso!`)),
   )()
 })
@@ -49,7 +49,7 @@ it('Deveria cadastrar um usuário com sucesso', async () => {
 it('Não deveria cadastrar um usuário com usuário inválido', async () => {
   return pipe(
     dataWithWrongUsername,
-    register(registerOk),
+    registerUser(registerOk),
     mapAll(error =>
       expect(error).toEqual(
         new Error('Slug inválido, use apenas letras minúsculas, números e traços com 3 ou mais caracteres'),
@@ -61,7 +61,7 @@ it('Não deveria cadastrar um usuário com usuário inválido', async () => {
 it('Não deveria cadastrar um usuário com email inválido', async () => {
   return pipe(
     dataWithWrongEmail,
-    register(registerOk),
+    registerUser(registerOk),
     mapAll(error => expect(error).toEqual(new Error('Email inválido'))),
   )()
 })
@@ -69,7 +69,7 @@ it('Não deveria cadastrar um usuário com email inválido', async () => {
 it('Não deveria cadastrar um usuário com senha inválido', async () => {
   return pipe(
     dataWithWrongPassword,
-    register(registerOk),
+    registerUser(registerOk),
     mapAll(error => expect(error).toEqual(new Error('A Senha deve ter 8 ou mais caracteres'))),
   )()
 })
@@ -77,7 +77,7 @@ it('Não deveria cadastrar um usuário com senha inválido', async () => {
 it('Não deveria cadastrar um usuário com email e senha inválido', async () => {
   return pipe(
     dataWithWrongEmailPassword,
-    register(registerOk),
+    registerUser(registerOk),
     mapAll(error =>
       expect(error).toEqual(
         new Error('Email inválido:::A Senha deve ter 8 ou mais caracteres'),
@@ -89,7 +89,7 @@ it('Não deveria cadastrar um usuário com email e senha inválido', async () =>
 it('Deveria lançar um erro ao tentar cadastrar um usuário', async () => {
   return pipe(
     data,
-    register(registerFail),
+    registerUser(registerFail),
     mapAll(error => expect(error).toEqual(new Error('External Error'))),
   )()
 })
