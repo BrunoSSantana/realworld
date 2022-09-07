@@ -2,6 +2,10 @@ import { Email, Password, Slug } from '@/core/types/scalar'
 import { pipe } from 'fp-ts/lib/function'
 import * as TE from 'fp-ts/lib/TaskEither'
 
+export function unsafe <T> (value: unknown): T {
+  return value as any
+}
+
 export function unsafeString (value: unknown): string {
   return value as string
 }
