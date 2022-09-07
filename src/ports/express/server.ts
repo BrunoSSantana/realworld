@@ -1,10 +1,10 @@
 import express from 'express'
 import { pipe } from 'fp-ts/lib/function'
 import * as TE from 'fp-ts/lib/TaskEither'
+import { env } from '@/helper'
+import * as db from '@/adapters/ports/db'
 import { registerUser } from '@/adapters/use-cases/user/register-user-adapter'
 import { registerArticle } from '@/adapters/use-cases/article/register-article-adapter'
-import { addCommentToAnArticleInDB, createArticleInDB, createUserInDB } from '@/adapters/ports/db'
-import { env } from '@/helper'
 import { addCommentToAnArticle } from '@/adapters/use-cases/article/add-comment-to-article-adapter'
 
 const app = express()
@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }))
 app.post('/api/users', async (req, res) => {
   return pipe(
     req.body.user,
-    registerUser(createUserInDB),
+    registerUser(db.createUserInDB),
     TE.map(user => res.status(201).json(user)),
     TE.mapLeft(err => res.status(422).json(getError(err.message)),
     ),
@@ -31,7 +31,7 @@ app.post('/api/users', async (req, res) => {
 app.post('/api/articles', async (req, res) => {
   return pipe(
     req.body.article,
-    registerArticle(createArticleInDB),
+    registerArticle(db.createArticleInDB),
     TE.map(article => res.status(201).json(article)),
     TE.mapLeft(err => res.status(422).json(getError(err.message))),
   )()
@@ -40,7 +40,7 @@ app.post('/api/articles', async (req, res) => {
 app.post('/api/articles/:slug/comment', async (req, res) => {
   return pipe(
     req.body.comment,
-    addCommentToAnArticle(addCommentToAnArticleInDB),
+    addCommentToAnArticle(db.addCommentToAnArticleInDB),
     TE.map(article => res.status(201).json(article)),
     TE.mapLeft(err => res.status(422).json(getError(err.message))),
   )()

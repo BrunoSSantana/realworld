@@ -1,7 +1,7 @@
 import { mapAll, unsafe } from '@/config/fixtures'
 import { CreateComment } from '@/core/types/comment'
 import { pipe } from 'fp-ts/lib/function'
-import { addCommentToArticle, OutsideCreateComment } from './create-comment'
+import { addCommentToAnArticle, OutsideCreateComment } from './create-comment'
 
 const data: CreateComment = {
   body: unsafe('Excelente artigo!'),
@@ -22,7 +22,7 @@ const registerFail: OutsideCreateComment<never> = async () => {
 it('Deveria adicionar um comentário a um Artigo', async () => {
   return pipe(
     data,
-    addCommentToArticle(registerOk),
+    addCommentToAnArticle(registerOk),
     mapAll(result => expect(result).toEqual(`Comentário registrado com sucesso: ${data.body}`)),
   )()
 })
@@ -30,7 +30,7 @@ it('Deveria adicionar um comentário a um Artigo', async () => {
 it('Não deveria adicionar um comentário vazio', async () => {
   return pipe(
     dataFail,
-    addCommentToArticle(registerOk),
+    addCommentToAnArticle(registerOk),
     mapAll(result => expect(result).toEqual(new Error('O comentário não pode ser vazio'))),
   )()
 })
@@ -38,7 +38,7 @@ it('Não deveria adicionar um comentário vazio', async () => {
 it('Deveria registar um comment se o outsideRegister retornar um erro', async () => {
   return pipe(
     data,
-    addCommentToArticle(registerFail),
+    addCommentToAnArticle(registerFail),
     mapAll(result => expect(result).toEqual(new Error('External error!'))),
   )()
 })

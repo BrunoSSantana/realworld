@@ -1,7 +1,7 @@
 import { mapAll, unsafe } from '@/config/fixtures'
 import { CreateArticle } from '@/core/types/article'
 import { pipe } from 'fp-ts/lib/function'
-import { OutsideRegister, registerArticle } from './register-article'
+import { OutsideRegisterArticle, registerArticle } from './register-article'
 
 const data: CreateArticle = {
   title: 'Article title',
@@ -25,11 +25,11 @@ const dataWithInvalidTitle: CreateArticle = {
   body: 'Article Body',
 }
 
-const registerOk: OutsideRegister<string> = async (data: CreateArticle) => {
+const registerOk: OutsideRegisterArticle<string> = async (data: CreateArticle) => {
   return `Article ${data.title} registered`
 }
 
-const registerFail: OutsideRegister<never> = async () => {
+const registerFail: OutsideRegisterArticle<never> = async () => {
   throw new Error('External error!')
 }
 
