@@ -1,7 +1,7 @@
 import { CreateUser } from '@/core/types/user'
 import { OutsideRegister, registerUser } from './register-user'
 import { pipe } from 'fp-ts/lib/function'
-import { mapAll, unsafeEmail, unsafePassword, unsafeSlug } from '@/config/fixtures'
+import { mapAll, unsafe } from '@/config/fixtures'
 
 const registerOk: OutsideRegister<string> = async (data) => {
   return `Usuário ${data.username} cadastrado com sucesso!`
@@ -12,30 +12,30 @@ const registerFail: OutsideRegister<never> = async () => {
 }
 
 const data: CreateUser = {
-  username: unsafeSlug('teste'),
-  email: unsafeEmail('teste@teste.com'),
-  password: unsafePassword('User123@'),
+  username: unsafe('teste'),
+  email: unsafe('teste@teste.com'),
+  password: unsafe('User123@'),
 }
 
 const dataWithWrongUsername: CreateUser = {
-  username: unsafeSlug('a'),
-  email: unsafeEmail('teste@teste.com'),
-  password: unsafePassword('User123@'),
+  username: unsafe('a'),
+  email: unsafe('teste@teste.com'),
+  password: unsafe('User123@'),
 }
 const dataWithWrongEmail: CreateUser = {
-  username: unsafeSlug('user-valid'),
-  email: unsafeEmail('emailinvalid.com'),
-  password: unsafePassword('User123@'),
+  username: unsafe('user-valid'),
+  email: unsafe('emailinvalid.com'),
+  password: unsafe('User123@'),
 }
 const dataWithWrongPassword: CreateUser = {
-  username: unsafeSlug('user-valid'),
-  email: unsafeEmail('email@valid.com'),
-  password: unsafePassword('frac@'),
+  username: unsafe('user-valid'),
+  email: unsafe('email@valid.com'),
+  password: unsafe('frac@'),
 }
 const dataWithWrongEmailPassword: CreateUser = {
-  username: unsafeSlug('user-valid'),
-  email: unsafeEmail('emailinvalid.com'),
-  password: unsafePassword('frac@'),
+  username: unsafe('user-valid'),
+  email: unsafe('emailinvalid.com'),
+  password: unsafe('frac@'),
 }
 
 it('Deveria cadastrar um usuário com sucesso', async () => {

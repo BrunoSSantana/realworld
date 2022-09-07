@@ -1,4 +1,4 @@
-import { mapAll, unsafeSlug, unsafeString } from '@/config/fixtures'
+import { mapAll, unsafe } from '@/config/fixtures'
 import { CreateArticle } from '@/core/types/article'
 import { pipe } from 'fp-ts/lib/function'
 import { OutsideRegister, registerArticle } from './register-article'
@@ -11,16 +11,16 @@ const data: CreateArticle = {
 
 const dataWithTagList: CreateArticle = {
   ...data,
-  tagList: ['tag1', 'tag2'].map((tag) => unsafeSlug(tag)),
+  tagList: ['tag1', 'tag2'].map((tag) => unsafe(tag)),
 }
 
 const dataWithInvalidTagList: CreateArticle = {
   ...data,
-  tagList: ['Tag1', '1ag2'].map((tag) => unsafeSlug(tag)),
+  tagList: ['Tag1', '1ag2'].map((tag) => unsafe(tag)),
 }
 
 const dataWithInvalidTitle: CreateArticle = {
-  title: unsafeString(1),
+  title: unsafe(1),
   description: 'Article Description',
   body: 'Article Body',
 }
