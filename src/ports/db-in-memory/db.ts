@@ -10,8 +10,8 @@ export const outsideRegisterUser: user.OutsideRegisterUser = async (data) => {
     user: {
       email: data.email,
       username: data.username,
-      bio: undefined,
-      token: undefined,
+      token: data.token,
+      bio: '',
       image: undefined,
     },
   }
