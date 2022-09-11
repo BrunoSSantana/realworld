@@ -3,7 +3,7 @@ import { pipe } from 'fp-ts/lib/function'
 import * as TE from 'fp-ts/lib/TaskEither'
 
 export function unsafe <T> (value: unknown): T {
-  return value as any
+  return value as T
 }
 
 // export function unsafeString (value: unknown): string {
