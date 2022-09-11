@@ -14,6 +14,9 @@ const PORT = env('PORT')
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+app.disable('x-powered-by')
+app.disable('etag')
+
 // routes
 
 // public
