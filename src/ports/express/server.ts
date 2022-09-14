@@ -15,7 +15,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 app.disable('x-powered-by')
-app.disable('etag')
+app.disable('etag') // header de tag é responsável por cache
 
 // routes
 

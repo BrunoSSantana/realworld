@@ -1,3 +1,5 @@
+import { it, expect } from 'vitest'
+
 import { mapAll, unsafe } from '@/config/fixtures'
 import { CreateArticle } from '@/core/types/article'
 import { pipe } from 'fp-ts/lib/function'

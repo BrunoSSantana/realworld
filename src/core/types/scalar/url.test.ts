@@ -1,3 +1,5 @@
+import { it, expect } from 'vitest'
+
 import { pipe } from 'fp-ts/lib/function'
 import * as TE from 'fp-ts/lib/TaskEither'
 import { getErrorMessage, mapAll } from '@/config/fixtures'

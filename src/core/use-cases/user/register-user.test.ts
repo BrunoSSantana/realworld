@@ -1,13 +1,15 @@
+import { it, expect } from 'vitest'
+
 import { CreateUser } from '@/core/types/user'
-import { OutsideRegister, registerUser } from './register-user'
+import { OutsideRegisterUser, registerUser } from './register-user'
 import { pipe } from 'fp-ts/lib/function'
 import { mapAll, unsafe } from '@/config/fixtures'
 
-const registerOk: OutsideRegister<string> = async (data) => {
+const registerOk: OutsideRegisterUser<string> = async (data) => {
   return `Usuário ${data.username} cadastrado com sucesso!`
 }
 
-const registerFail: OutsideRegister<never> = async () => {
+const registerFail: OutsideRegisterUser<never> = async () => {
   throw new Error('External Error')
 }
 
