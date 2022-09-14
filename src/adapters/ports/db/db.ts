@@ -5,17 +5,14 @@ import * as article from '@/adapters/use-cases/article/register-article-adapter'
 import * as comment from '@/adapters/use-cases/article/add-comment-to-article-adapter'
 
 export const createUserInDB: user.OutsideRegisterUser = async (data) => {
-  const { user: registeredUser } = await db.outsideRegisterUser(data)
+  const registeredUser = await db.outsideRegisterUser(data)
 
-  const token = await jwt.generateToken({ id: registeredUser.id })
-  // return db.outsideRegisterUser({
-  //   ...data,
-  //    token
-  //   })
+  const token = await jwt.generateToken({ id: registeredUser?.id })
+
   return {
     user: {
-      username: registeredUser.username,
-      email: registeredUser.email,
+      username: registeredUser!.username,
+      email: registeredUser!.email,
       bio: '',
       image: undefined,
       token,

@@ -5,22 +5,31 @@ import * as comment from '@/adapters/use-cases/article/add-comment-to-article-ad
 import * as article from '@/adapters/use-cases/article/register-article-adapter'
 import * as user from '@/adapters/use-cases/user/register-user-adapter'
 
+type DBUser = user.User & {
+  id: string,
+  password: string,
+}
+
 type DB = {
   users: {
-    [id: string]: user.User & { password: string }
+    [id: string]: DBUser,
   }
 }
+
 const db: DB = {
   users: {},
 }
 
+type OutsideRegisterUser = (data: user.CreateUser) => Promise<DBUser | undefined>
+
 // PAREI EM 1:20:15 - 021 : Implementação de banco de dados em memória com Node.js + TypeScript
 
 // outside faker
-export const outsideRegisterUser: user.OutsideRegisterUser = async (data) => {
+export const outsideRegisterUser: OutsideRegisterUser = async (data) => {
   const id = uuidv4()
 
   db.users[id] = {
+    id,
     email: data.email,
     username: data.username,
     password: data.password,

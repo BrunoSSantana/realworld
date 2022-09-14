@@ -5,9 +5,7 @@ export type EmailBrand = {
   readonly Email: unique symbol
 }
 
-export function isEmail (value: string): boolean {
-  return /^\w+.+?@\w+.+?$/.test(value)
-}
+export const isEmail = (value: string): boolean => /^\w+.+?@\w+.+?$/.test(value)
 
 export const emailCodec = withMessage(
   t.brand(
