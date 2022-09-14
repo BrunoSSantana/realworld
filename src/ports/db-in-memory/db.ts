@@ -1,20 +1,32 @@
 import slugify from 'slugify'
+import { v4 as uuidv4 } from 'uuid'
 
 import * as comment from '@/adapters/use-cases/article/add-comment-to-article-adapter'
 import * as article from '@/adapters/use-cases/article/register-article-adapter'
 import * as user from '@/adapters/use-cases/user/register-user-adapter'
 
+type DB = {
+  users: {
+    [id: string]: user.User & { password: string }
+  }
+}
+const db: DB = {
+  users: {},
+}
+
+// PAREI EM 1:20:15 - 021 : Implementação de banco de dados em memória com Node.js + TypeScript
+
 // outside faker
 export const outsideRegisterUser: user.OutsideRegisterUser = async (data) => {
-  return {
-    user: {
-      email: data.email,
-      username: data.username,
-      token: data.token,
-      bio: '',
-      image: undefined,
-    },
+  const id = uuidv4()
+
+  db.users[id] = {
+    email: data.email,
+    username: data.username,
+    password: data.password,
   }
+
+  return db.users[id]
 }
 
 export const outsideRegisterArticle: article.OutsideRegisterArticle = async (data) => {

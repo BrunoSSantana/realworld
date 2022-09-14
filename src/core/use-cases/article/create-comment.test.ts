@@ -1,3 +1,5 @@
+import { it, expect } from 'vitest'
+
 import { mapAll, unsafe } from '@/config/fixtures'
 import { CreateComment } from '@/core/types/comment'
 import { pipe } from 'fp-ts/lib/function'
