@@ -7,6 +7,10 @@ import * as comment from '@/adapters/use-cases/article/add-comment-to-article-ad
 export const createUserInDB: user.OutsideRegisterUser = async (data) => {
   const registeredUser = await db.outsideRegisterUser(data)
 
+  if (!registeredUser) {
+    throw new Error('Internal error registering user!')
+  }
+
   const token = await jwt.generateToken({ id: registeredUser?.id })
 
   return {
