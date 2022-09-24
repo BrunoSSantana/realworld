@@ -34,12 +34,13 @@ app.post('/api/users', async (req, res) => {
 // private
 app.post('/api/articles', async (req, res) => {
   const token = req.header('authorization')?.replace('Bearer ', '') ?? ''
+
   const payload = await verifyToken(token)
+  const idProp = 'id'
 
   const data = {
     ...req.body.article,
-    // eslint-disable-next-line dot-notation
-    authorId: payload['id'],
+    authorId: payload[idProp],
   }
 
   return pipe(
