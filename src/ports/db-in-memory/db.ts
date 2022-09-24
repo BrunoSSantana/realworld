@@ -1,22 +1,11 @@
-import { ArticleOutput } from '@/core/types/article'
-import { User } from '@/core/types/user'
+import { DBArticle, DBUser } from '@/ports/adapters'
 
-export type DBUser = User & {
-  id: string,
-  password: string,
-}
-
-export type DBArticle = Omit<ArticleOutput, 'favorited' | 'author'> & {
-  id: string
-  authorId: string
-}
-
-type DB = {
+type DBInMemory = {
   users: { [id: string]: DBUser },
   articles: { [id: string]: DBArticle }
 }
 
-export const db: DB = {
+export const db: DBInMemory = {
   users: {},
   articles: {},
 }

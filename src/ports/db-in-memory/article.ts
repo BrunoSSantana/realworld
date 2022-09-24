@@ -1,10 +1,10 @@
-
 import slugify from 'slugify'
 import { v4 as uuidv4 } from 'uuid'
 
 import * as comment from '@/adapters/use-cases/article/add-comment-to-article-adapter'
 import { CreateArticle } from '@/core/types/article'
-import { db, DBArticle } from './db'
+import { DBArticle } from '@/ports/adapters'
+import { db } from './db'
 
 type CreateArticleInDB = (data: CreateArticle) => Promise<DBArticle | undefined>
 
