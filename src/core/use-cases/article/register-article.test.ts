@@ -9,6 +9,7 @@ const data: CreateArticle = {
   title: 'Article title',
   description: 'Article Description',
   body: 'Article Body',
+  authorId: unsafe('2c9c1f6b-3ba3-4ecf-bd61-2fb25b2a8b99'),
 }
 
 const dataWithTagList: CreateArticle = {
@@ -22,9 +23,13 @@ const dataWithInvalidTagList: CreateArticle = {
 }
 
 const dataWithInvalidTitle: CreateArticle = {
+  ...data,
   title: unsafe(1),
-  description: 'Article Description',
-  body: 'Article Body',
+}
+
+const dataWithInvalidAuthorID: CreateArticle = {
+  ...data,
+  authorId: unsafe('123-invalid-id'),
 }
 
 const registerOk: OutsideRegisterArticle<string> = async (data: CreateArticle) => {
@@ -74,5 +79,13 @@ it('Não deve criar um artigo com title inválido', async () => {
     dataWithInvalidTitle,
     registerArticle(registerOk),
     mapAll(error => expect(error).toEqual(new Error('Invalid title'))),
+  )()
+})
+
+it('Não deve criar um artigo com um authorID inválido', async () => {
+  return pipe(
+    dataWithInvalidAuthorID,
+    registerArticle(registerOk),
+    mapAll(error => expect(error).toEqual(new Error('Invalid authorId'))),
   )()
 })

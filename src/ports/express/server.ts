@@ -6,6 +6,7 @@ import * as db from '@/adapters/ports/db'
 import { registerUser } from '@/adapters/use-cases/user/register-user-adapter'
 import { registerArticle } from '@/adapters/use-cases/article/register-article-adapter'
 import { addCommentToAnArticle } from '@/adapters/use-cases/article/add-comment-to-article-adapter'
+import { verifyToken } from '@/adapters/ports/jwt/jwt'
 
 const app = express()
 const PORT = env('PORT')
@@ -32,8 +33,17 @@ app.post('/api/users', async (req, res) => {
 
 // private
 app.post('/api/articles', async (req, res) => {
+  const token = req.header('authorization')?.replace('Bearer ', '') ?? ''
+  const payload = await verifyToken(token)
+
+  const data = {
+    ...req.body.article,
+    // eslint-disable-next-line dot-notation
+    authorId: payload['id'],
+  }
+
   return pipe(
-    req.body.article,
+    data,
     registerArticle(db.createArticleInDB),
     TE.map(article => res.status(201).json(article)),
     TE.mapLeft(err => res.status(422).json(getError(err.message))),
