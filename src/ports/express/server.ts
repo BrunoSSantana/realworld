@@ -18,6 +18,29 @@ app.use(express.urlencoded({ extended: true }))
 app.disable('x-powered-by')
 app.disable('etag') // header de tag é responsável por cache
 
+const auth = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1]
+
+    if (!token) {
+      return res.status(401).json(getError('Unauthorized'))
+    }
+
+    const decoded = await verifyToken(token)
+
+    if (decoded) {
+      const propUser = 'user'
+      res.locals[propUser] = decoded
+
+      return next()
+    }
+
+    return res.status(401).json(getError('Unauthorized'))
+  } catch {
+    return res.status(401).json(getError('Forbiden'))
+  }
+}
+
 // routes
 
 // public
@@ -32,11 +55,11 @@ app.post('/api/users', async (req, res) => {
 })
 
 // private
-app.post('/api/articles', async (req, res) => {
-  const token = req.header('authorization')?.replace('Bearer ', '') ?? ''
-
-  const payload = await verifyToken(token)
+app.post('/api/articles', auth, async (req, res) => {
+  const propUser = 'user'
   const idProp = 'id'
+
+  const payload = res.locals[propUser]
 
   const data = {
     ...req.body.article,
@@ -51,9 +74,19 @@ app.post('/api/articles', async (req, res) => {
   )()
 })
 
-app.post('/api/articles/:slug/comment', async (req, res) => {
+app.post('/api/articles/:slug/comment', auth, async (req, res) => {
+  const propUser = 'user'
+  const propSlug = 'slug'
+  const payload = res.locals[propUser]
+
+  const data = {
+    ...req.body.comment,
+    authorId: payload.id,
+    articleSlug: req.params[propSlug],
+  }
+
   return pipe(
-    req.body.comment,
+    data,
     addCommentToAnArticle(db.addCommentToAnArticleInDB),
     TE.map(article => res.status(201).json(article)),
     TE.mapLeft(err => res.status(422).json(getError(err.message))),
@@ -65,7 +98,7 @@ app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`)
 })
 
-function getError (erros: string) {
+const getError = (erros: string) => {
   return {
     errors: {
       body: erros.split(':::'),

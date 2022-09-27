@@ -41,6 +41,19 @@ export const createArticleInDB: article.OutsideRegisterArticle = async (data) =>
   }
 }
 
-export const addCommentToAnArticleInDB: comment.OutsideRegisterComment = (data) => {
-  return db.addCommentToAnArticleInDB(data)
+export const addCommentToAnArticleInDB: comment.OutsideRegisterComment = async (data) => {
+  const comment = await db.addCommentToAnArticleInDB(data)
+
+  return {
+    id: comment.id,
+    body: comment.body,
+    createdAt: comment.createdAt,
+    updatedAt: comment.updatedAt,
+    author: {
+      username: comment.author.username,
+      bio: comment.author.bio ?? '',
+      image: comment.author.image ?? '',
+      following: false,
+    },
+  }
 }
