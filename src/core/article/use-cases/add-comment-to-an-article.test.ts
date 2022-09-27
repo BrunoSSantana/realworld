@@ -1,9 +1,9 @@
 import { it, expect } from 'vitest'
 
 import { mapAll, unsafe } from '@/config/fixtures'
-import { CreateComment } from '@/core/types/comment'
+import { CreateComment } from '@/core/article/types/comment-types'
 import { pipe } from 'fp-ts/lib/function'
-import { addCommentToAnArticle, OutsideCreateComment } from './create-comment'
+import { addCommentToAnArticle, OutsideCreateComment } from './add-comment-to-an-article'
 
 const data: CreateComment = {
   body: unsafe('Excelente artigo!'),

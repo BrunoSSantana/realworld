@@ -1,5 +1,5 @@
 import * as t from 'io-ts'
-import { slugCodec, urlCodec } from './scalar'
+import { slugCodec, urlCodec } from '@/core/_types'
 
 export const profileCodec = t.type({
   username: slugCodec,

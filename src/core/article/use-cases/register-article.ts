@@ -1,5 +1,5 @@
 import { pipe } from 'fp-ts/lib/function'
-import { CreateArticle } from '@/core/types/article'
+import { CreateArticle } from '@/core/article/types/article-types'
 import { validateArticle } from './validate-article'
 import * as TE from 'fp-ts/lib/TaskEither'
 import * as E from 'fp-ts/lib/Either'

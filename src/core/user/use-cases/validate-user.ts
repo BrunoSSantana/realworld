@@ -1,5 +1,5 @@
 import * as E from 'fp-ts/Either'
-import { CreateUser, createUserCodec } from '@/core/types/user'
+import { CreateUser, createUserCodec } from '@/core/user/types/user-types'
 import { pipe } from 'fp-ts/lib/function'
 import { failure } from 'io-ts/PathReporter'
 

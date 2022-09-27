@@ -1,6 +1,6 @@
 import { it, expect } from 'vitest'
 
-import { CreateUser } from '@/core/types/user'
+import { CreateUser } from '@/core/user/types/user-types'
 import { OutsideRegisterUser, registerUser } from './register-user'
 import { pipe } from 'fp-ts/lib/function'
 import { mapAll, unsafe } from '@/config/fixtures'

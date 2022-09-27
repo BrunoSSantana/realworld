@@ -1,4 +1,4 @@
-import { DBArticle, DBComment, DBUser } from '@/ports/adapters'
+import { DBUser, DBArticle, DBComment } from '@/ports/adapters/db/types'
 
 type ArticleID = string
 

@@ -1,5 +1,5 @@
 import * as t from 'io-ts'
-import { slugCodec } from './scalar'
+import { slugCodec } from '@/core/_types'
 
 export const tagCodec = slugCodec
 

@@ -1,6 +1,6 @@
 import * as TE from 'fp-ts/TaskEither'
 import * as E from 'fp-ts/Either'
-import { CreateComment, createCommentCodec } from '@/core/types/comment'
+import { CreateComment, createCommentCodec } from '@/core/article/types/comment-types'
 import { pipe } from 'fp-ts/lib/function'
 import { failure } from 'io-ts/lib/PathReporter'
 

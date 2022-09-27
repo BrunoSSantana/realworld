@@ -1,7 +1,7 @@
 import { it, expect } from 'vitest'
 
 import { mapAll, unsafe } from '@/config/fixtures'
-import { CreateArticle } from '@/core/types/article'
+import { CreateArticle } from '@/core/article/types/article-types'
 import { pipe } from 'fp-ts/lib/function'
 import { OutsideRegisterArticle, registerArticle } from './register-article'
 

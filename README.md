@@ -45,23 +45,35 @@ This project uses Hexagonal Architecture (Ports & Adapters) with Functional Prog
 ```terminal
 .
 ├── src
-│   ├── adapters
-│   ├── config
-│   │   ├── tests
-│   │   │   └── fixtures
-│   │   └── module-alias.ts
-│   ├── core
-│   │   ├── types
-│   │   └── use-cases
-│   ├── ports
-│   │   └── adapters
-│   ├── index.ts
-│   └── app.ts
-├── environment.d.ts
-├── jest.config.integration.js
-└── jest.config.js
+│   ├── config
+│   │   ├── fixtures
+│   │   └── module-alias.ts
+│   ├── core
+│   │   ├── <domain / entity>
+│   │   │   ├── types
+│   │   │   │   ├── <entity>-types.ts
+│   │   │   │   └── <auxiliar-entity>-types.ts
+│   │   │   └── use-cases
+│   │   │       ├── <use-case>-adapter.ts
+│   │   │       ├── <use-case>.test.ts
+│   │   │       └── <use-case>.ts
+│   │   ├── scalar-types
+│   │   │   ├── <scalar-type>.test.ts
+│   │   │   └── <scalar-type>.ts
+│   ├── helper
+│   ├── ports
+│   │   ├── adapters
+│   │   │   ├── <port-adapter>
+│   │   │   │   ├── <port-adapter>.ts
+│   │   │   │   ├── index.ts
+│   │   │   │   └── types.ts
+│   │   └── <port>
+│   ├── app.ts
+│   └── index.ts
+├── .env.example
+├── vitest.config.ts
 ```
-
+> Depreceated
 | Directory / File             | Description                                                                                                                    |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | `src`                        | All source code write in TypeScript must be in this directory                                                                  |

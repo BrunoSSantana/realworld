@@ -1,19 +1,18 @@
 import slugify from 'slugify'
 import { v4 as uuidv4 } from 'uuid'
 
-import { CreateArticle } from '@/core/types/article'
-import { DBArticle } from '@/ports/adapters'
-import { CreateComment } from '@/core/types/comment'
+import { CreateArticle } from '@/core/article/types/article-types'
+import { CreateComment } from '@/core/article/types/comment-types'
+import { ProfileOutput } from '@/core/user/types/profile-types'
+
+import { DBArticle } from '@/ports/adapters/db/types'
 import { db } from './db'
-import { ProfileOutput } from '@/core/types/profile'
 
 type CreateArticleInDB = (data: CreateArticle) => Promise<DBArticle | undefined>
 
 export const createArticleInDB: CreateArticleInDB = async (data) => {
   const id = uuidv4()
   const date = new Date().toISOString()
-
-  // const author = getUserProfileFromDB(data.authorId)
 
   const articleSlug = slugify(data.title, { lower: true })
 

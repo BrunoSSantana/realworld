@@ -1,8 +1,8 @@
 import * as db from '@/ports/db-in-memory'
-import * as jwt from '@/adapters/ports/jwt/jwt'
-import * as user from '@/adapters/use-cases/user/register-user-adapter'
-import * as article from '@/adapters/use-cases/article/register-article-adapter'
-import * as comment from '@/adapters/use-cases/article/add-comment-to-article-adapter'
+import * as jwt from '@/ports/adapters/jwt/jwt'
+import * as user from '@/core/user/use-cases/register-user-adapter'
+import * as article from '@/core/article/use-cases/register-article-adapter'
+import * as comment from '@/core/article/use-cases/add-comment-to-article-adapter'
 
 export const createUserInDB: user.OutsideRegisterUser = async (data) => {
   const registeredUser = await db.createUserInDB(data)

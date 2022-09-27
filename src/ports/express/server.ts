@@ -1,12 +1,19 @@
 import express from 'express'
 import { pipe } from 'fp-ts/lib/function'
 import * as TE from 'fp-ts/lib/TaskEither'
+
 import { env } from '@/helper'
-import * as db from '@/adapters/ports/db'
-import { registerUser } from '@/adapters/use-cases/user/register-user-adapter'
-import { registerArticle } from '@/adapters/use-cases/article/register-article-adapter'
-import { addCommentToAnArticle } from '@/adapters/use-cases/article/add-comment-to-article-adapter'
-import { verifyToken } from '@/adapters/ports/jwt/jwt'
+
+import { registerUser } from '@/core/user/use-cases/register-user-adapter'
+import { registerArticle } from '@/core/article/use-cases/register-article-adapter'
+import { addCommentToAnArticle } from '@/core/article/use-cases/add-comment-to-article-adapter'
+
+import {
+  createUserInDB,
+  createArticleInDB,
+  addCommentToAnArticleInDB,
+} from '@/ports/adapters/db/db'
+import { verifyToken } from '@/ports/adapters/jwt/jwt'
 
 const app = express()
 const PORT = env('PORT')
@@ -47,7 +54,7 @@ const auth = async (req: express.Request, res: express.Response, next: express.N
 app.post('/api/users', async (req, res) => {
   return pipe(
     req.body.user,
-    registerUser(db.createUserInDB),
+    registerUser(createUserInDB),
     TE.map(user => res.status(201).json(user)),
     TE.mapLeft(err => res.status(422).json(getError(err.message)),
     ),
@@ -68,7 +75,7 @@ app.post('/api/articles', auth, async (req, res) => {
 
   return pipe(
     data,
-    registerArticle(db.createArticleInDB),
+    registerArticle(createArticleInDB),
     TE.map(article => res.status(201).json(article)),
     TE.mapLeft(err => res.status(422).json(getError(err.message))),
   )()
@@ -87,7 +94,7 @@ app.post('/api/articles/:slug/comment', auth, async (req, res) => {
 
   return pipe(
     data,
-    addCommentToAnArticle(db.addCommentToAnArticleInDB),
+    addCommentToAnArticle(addCommentToAnArticleInDB),
     TE.map(article => res.status(201).json(article)),
     TE.mapLeft(err => res.status(422).json(getError(err.message))),
   )()

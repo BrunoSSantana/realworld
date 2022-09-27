@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 
-import { CreateUser } from '@/core/types/user'
-import { DBUser } from '@/ports/adapters'
+import { CreateUser } from '@/core/user/types/user-types'
+import { DBUser } from '@/ports/adapters/db/types'
 import { db } from './db'
 
 type CreateUserInDB = (data: CreateUser) => Promise<DBUser>

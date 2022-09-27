@@ -1,9 +1,9 @@
 import * as t from 'io-ts'
 import { UUID, withMessage } from 'io-ts-types'
 
-import { profileCodec } from '@/core/types/profile'
-import { dateCodec, positiveCodec, slugCodec } from '@/core/types/scalar'
-import { tagCodec } from './tag'
+import { profileCodec } from '@/core/user/types/profile-types'
+import { dateCodec, positiveCodec, slugCodec } from '@/core/_types'
+import { tagCodec } from './tag-types'
 
 const articleCodecRequired = t.type({
   slug: slugCodec,
