@@ -28,4 +28,9 @@ export const createUserCodec = t.type({
 
 export type CreateUser = t.TypeOf<typeof createUserCodec>
 
-// profile type
+export const loginUserCase = t.type({
+  email: emailCodec,
+  password: passwordCodec,
+})
+
+export type LoginUser = t.TypeOf<typeof loginUserCase>

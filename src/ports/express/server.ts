@@ -1,6 +1,7 @@
 import express from 'express'
 import { pipe } from 'fp-ts/lib/function'
 import * as TE from 'fp-ts/lib/TaskEither'
+import * as E from 'fp-ts/lib/Either'
 
 import { env } from '@/helper'
 
@@ -12,7 +13,8 @@ import {
   createUserInDB,
   createArticleInDB,
   addCommentToAnArticleInDB,
-} from '@/ports/adapters/db/db'
+  login,
+} from '@/ports/adapters/db/domains'
 import { verifyToken } from '@/ports/adapters/jwt/jwt'
 
 const app = express()
@@ -48,7 +50,7 @@ const auth = async (req: express.Request, res: express.Response, next: express.N
   }
 }
 
-// routes
+// ROUTES
 
 // public
 app.post('/api/users', async (req, res) => {
@@ -58,6 +60,17 @@ app.post('/api/users', async (req, res) => {
     TE.map(user => res.status(201).json(user)),
     TE.mapLeft(err => res.status(422).json(getError(err.message)),
     ),
+  )()
+})
+
+app.post('/api/users/login', async (req, res) => {
+  return pipe(
+    TE.tryCatch(
+      () => login(req.body.user),
+      E.toError,
+    ),
+    TE.map(result => res.json(result)),
+    TE.mapLeft(error => res.status(422).json(getError(error.message))),
   )()
 })
 
