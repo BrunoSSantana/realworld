@@ -1,4 +1,5 @@
 import express from 'express'
+import cors from 'cors'
 import { pipe } from 'fp-ts/lib/function'
 import * as TE from 'fp-ts/lib/TaskEither'
 import * as E from 'fp-ts/lib/Either'
@@ -23,6 +24,7 @@ const PORT = env('PORT')
 // middlewares
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(cors())
 
 app.disable('x-powered-by')
 app.disable('etag') // header de tag é responsável por cache
