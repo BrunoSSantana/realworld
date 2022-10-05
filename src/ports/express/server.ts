@@ -2,21 +2,12 @@ import express from 'express'
 import cors from 'cors'
 import { pipe } from 'fp-ts/lib/function'
 import * as TE from 'fp-ts/lib/TaskEither'
-import * as E from 'fp-ts/lib/Either'
 
-import { env } from '@/helper'
+import { env, getError } from '@/helper'
 
-import { registerUser } from '@/core/user/use-cases/register-user-adapter'
-import { registerArticle } from '@/core/article/use-cases/register-article-adapter'
-import { addCommentToAnArticle } from '@/core/article/use-cases/add-comment-to-article-adapter'
-
-import {
-  createUserInDB,
-  createArticleInDB,
-  addCommentToAnArticleInDB,
-  login,
-} from '@/ports/adapters/db/domains'
 import { verifyToken } from '@/ports/adapters/jwt/jwt'
+import { httpLogin, httpRegisterUser } from '@/ports/adapters/http/modules/user'
+import { httpAddCommentToAnArticle, httpRegisterArticle } from '@/ports/adapters/http/modules/article'
 
 const app = express()
 const PORT = env('PORT')
@@ -58,21 +49,19 @@ const auth = async (req: express.Request, res: express.Response, next: express.N
 app.post('/api/users', async (req, res) => {
   return pipe(
     req.body.user,
-    registerUser(createUserInDB),
+    httpRegisterUser,
     TE.map(user => res.status(201).json(user)),
-    TE.mapLeft(err => res.status(422).json(getError(err.message)),
+    TE.mapLeft(err => res.status(422).json(err),
     ),
   )()
 })
 
 app.post('/api/users/login', async (req, res) => {
   return pipe(
-    TE.tryCatch(
-      () => login(req.body.user),
-      E.toError,
-    ),
+    req.body.user,
+    httpLogin,
     TE.map(result => res.json(result)),
-    TE.mapLeft(error => res.status(422).json(getError(error.message))),
+    TE.mapLeft(error => res.status(422).json(error)),
   )()
 })
 
@@ -90,9 +79,9 @@ app.post('/api/articles', auth, async (req, res) => {
 
   return pipe(
     data,
-    registerArticle(createArticleInDB),
+    httpRegisterArticle,
     TE.map(article => res.status(201).json(article)),
-    TE.mapLeft(err => res.status(422).json(getError(err.message))),
+    TE.mapLeft(err => res.status(422).json(err)),
   )()
 })
 
@@ -109,21 +98,16 @@ app.post('/api/articles/:slug/comment', auth, async (req, res) => {
 
   return pipe(
     data,
-    addCommentToAnArticle(addCommentToAnArticleInDB),
-    TE.map(article => res.status(201).json(article)),
-    TE.mapLeft(err => res.status(422).json(getError(err.message))),
+    httpAddCommentToAnArticle,
+    TE.map(commentToAnArticle => res.status(201).json(commentToAnArticle)),
+    TE.mapLeft(err => res.status(422).json(err)),
   )()
 })
 
 // start server
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`)
-})
 
-const getError = (erros: string) => {
-  return {
-    errors: {
-      body: erros.split(':::'),
-    },
-  }
+export const start = () => {
+  app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`)
+  })
 }

@@ -2,7 +2,7 @@ import { env } from '@/helper'
 import { JWTPayload, jwtVerify, SignJWT } from 'jose'
 
 // TODO: garantir que o secret tenha ao menos 32 chars
-const JWT_SECRET = env('JWT_SECRET')
+const JWT_SECRET = env<string>('JWT_SECRET')
 
 if (JWT_SECRET.length < 32) {
   throw new Error('JWT_SECRET precisa ter 32 ou mais caracteres')

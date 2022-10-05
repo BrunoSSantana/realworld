@@ -5,5 +5,5 @@ export type OutsideRegisterUser = user.OutsideRegisterUser<{
   user: UserOutput,
 }>
 
-export const registerUser: user.RegisterUser = (outsideRegister) => (data) =>
+export const registerUserAdapter: user.RegisterUser = (outsideRegister) => (data) =>
   user.registerUser(outsideRegister)(data)

@@ -9,5 +9,5 @@ export type OutsideRegisterArticle = Out<{
   article: ArticleOutput
 }>
 
-export const registerArticle: RegisterArticle = (outsideRegister) => (data) =>
+export const registerArticleAdapter: RegisterArticle = (outsideRegister) => (data) =>
   register(outsideRegister)(data)
