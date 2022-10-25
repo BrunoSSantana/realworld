@@ -12,7 +12,7 @@ import { JWTPayload } from 'jose'
 import { pipe } from 'fp-ts/lib/function'
 import * as TE from 'fp-ts/lib/TaskEither'
 
-import { env, getError } from '@/helper'
+import { env } from '@/helper'
 
 import {
   AddCommentApi,
@@ -28,7 +28,7 @@ import {
   httpAddCommentToAnArticle,
   httpRegisterArticle,
 } from '@/ports/adapters/http/modules/article'
-import { verifyToken } from '@/ports/adapters/jwt/jwt'
+import { getError, getToken } from '@/ports/adapters/http/http'
 
 import { AuthorId, CreateArticle } from '@/core/article/types/article-types'
 
@@ -51,15 +51,7 @@ export const app = fastify<http.Server, CustomRequest>({ logger: true })
 
 const auth: AuthPreValidation = async (req, reply, done) => {
   try {
-    const [, token] = req.headers.authorization?.split(' ') ?? ''
-
-    if (!token) {
-      return reply
-        .status(401)
-        .send(getError({ errors: 'Forbiden', context: 'auth' }))
-    }
-
-    const payload = await verifyToken(token)
+    const payload = await getToken(req.headers.authorization)
 
     req.raw.auth = payload
     return done()

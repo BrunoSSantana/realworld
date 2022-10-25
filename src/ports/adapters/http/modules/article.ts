@@ -1,7 +1,7 @@
 import { pipe } from 'fp-ts/lib/function'
 import * as TE from 'fp-ts/lib/TaskEither'
 
-import { getError } from '@/helper'
+import { getError } from '@/ports/adapters/http/http'
 
 import { addCommentToAnArticleInDB, createArticleInDB } from '@/ports/adapters/db/domains'
 

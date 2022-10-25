@@ -3,9 +3,9 @@ import cors from 'cors'
 import { pipe } from 'fp-ts/lib/function'
 import * as TE from 'fp-ts/lib/TaskEither'
 
-import { env, getError } from '@/helper'
+import { env } from '@/helper'
 
-import { verifyToken } from '@/ports/adapters/jwt/jwt'
+import { getError, getToken } from '@/ports/adapters/http/http'
 import { httpLogin, httpRegisterUser } from '@/ports/adapters/http/modules/user'
 import { httpAddCommentToAnArticle, httpRegisterArticle } from '@/ports/adapters/http/modules/article'
 
@@ -22,22 +22,12 @@ app.disable('etag') // header de tag é responsável por cache
 
 const auth = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
   try {
-    const token = req.headers.authorization?.split(' ')[1]
+    const payload = await getToken(req.headers.authorization)
 
-    if (!token) {
-      return res.status(401).json(getError({ errors: 'Unauthorized', context: 'auth' }))
-    }
+    const propUser = 'user'
+    res.locals[propUser] = payload
 
-    const decoded = await verifyToken(token)
-
-    if (decoded) {
-      const propUser = 'user'
-      res.locals[propUser] = decoded
-
-      return next()
-    }
-
-    return res.status(401).json(getError({ errors: 'Unauthorized', context: 'auth' }))
+    return next()
   } catch {
     return res.status(401).json(getError({ errors: 'Forbiden', context: 'auth' }))
   }
