@@ -4,6 +4,7 @@ import * as user from '@/core/user/use-cases/register-user-adapter'
 import * as article from '@/core/article/use-cases/register-article-adapter'
 import * as comment from '@/core/article/use-cases/add-comment-to-article-adapter'
 import { LoginUser, UserOutput } from '@/core/user/types/user-types'
+import slugify from 'slugify'
 
 export const createUserInDB: user.OutsideRegisterUser = async (data) => {
   const registeredUser = await db.createUserInDB(data)
@@ -19,7 +20,7 @@ export const createUserInDB: user.OutsideRegisterUser = async (data) => {
       username: registeredUser!.username,
       email: registeredUser!.email,
       bio: '',
-      image: undefined,
+      image: '',
       token,
     },
   }
@@ -35,15 +36,17 @@ export const login: Login = async (data) => {
     user: {
       email: userData.email,
       username: userData.username,
-      bio: userData.bio,
-      image: userData.image,
+      bio: userData.bio ?? '',
+      image: userData.image ?? '',
       token,
     },
   }
 }
 
 export const createArticleInDB: article.OutsideRegisterArticle = async (data) => {
-  const registeredArticle = await db.createArticleInDB(data)
+  const slug = slugify(data.title, { lower: true })
+
+  const registeredArticle = await db.createArticleInDB({ ...data, slug })
 
   if (!registeredArticle) {
     throw new Error('Internal error registering article!')
@@ -55,6 +58,7 @@ export const createArticleInDB: article.OutsideRegisterArticle = async (data) =>
     article: {
       ...articleWithoutAuthorId,
       favorited: false,
+      // author,
     },
   }
 }
@@ -62,16 +66,5 @@ export const createArticleInDB: article.OutsideRegisterArticle = async (data) =>
 export const addCommentToAnArticleInDB: comment.OutsideRegisterComment = async (data) => {
   const comment = await db.addCommentToAnArticleInDB(data)
 
-  return {
-    id: comment.id,
-    body: comment.body,
-    createdAt: comment.createdAt,
-    updatedAt: comment.updatedAt,
-    author: {
-      username: comment.author.username,
-      bio: comment.author.bio ?? '',
-      image: comment.author.image ?? '',
-      following: false,
-    },
-  }
+  return { comment }
 }

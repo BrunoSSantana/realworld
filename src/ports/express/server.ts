@@ -25,7 +25,7 @@ const auth = async (req: express.Request, res: express.Response, next: express.N
     const token = req.headers.authorization?.split(' ')[1]
 
     if (!token) {
-      return res.status(401).json(getError('Unauthorized'))
+      return res.status(401).json(getError({ errors: 'Unauthorized', context: 'auth' }))
     }
 
     const decoded = await verifyToken(token)
@@ -37,9 +37,9 @@ const auth = async (req: express.Request, res: express.Response, next: express.N
       return next()
     }
 
-    return res.status(401).json(getError('Unauthorized'))
+    return res.status(401).json(getError({ errors: 'Unauthorized', context: 'auth' }))
   } catch {
-    return res.status(401).json(getError('Forbiden'))
+    return res.status(401).json(getError({ errors: 'Forbiden', context: 'auth' }))
   }
 }
 

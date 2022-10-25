@@ -1,26 +1,25 @@
-import slugify from 'slugify'
 import { v4 as uuidv4 } from 'uuid'
 
-import { CreateArticle } from '@/core/article/types/article-types'
+import { CreateArticleInput } from '@/core/article/types/article-types'
 import { CreateComment } from '@/core/article/types/comment-types'
 import { ProfileOutput } from '@/core/user/types/profile-types'
 
 import { DBArticle } from '@/ports/adapters/db/types'
 import { db } from './db'
 
-type CreateArticleInDB = (data: CreateArticle) => Promise<DBArticle | undefined>
+type CreateArticleInDB = (data: CreateArticleInput) => Promise<DBArticle | undefined>
 
 export const createArticleInDB: CreateArticleInDB = async (data) => {
   const id = uuidv4()
   const date = new Date().toISOString()
 
-  const articleSlug = slugify(data.title, { lower: true })
+  const author = getUserProfileFromDB(data.authorId)
 
-  db.articlesBySlug[articleSlug] = id
+  db.articlesBySlug[data.slug] = id
 
   const registeredArticle = db.articles[id] = {
     id,
-    slug: articleSlug,
+    slug: data.slug,
     title: data.title,
     description: data.description,
     body: data.body,
@@ -31,7 +30,10 @@ export const createArticleInDB: CreateArticleInDB = async (data) => {
     authorId: data.authorId,
   }
 
-  return registeredArticle
+  return {
+    ...registeredArticle,
+    author,
+  }
 }
 
 export const addCommentToAnArticleInDB = async (data: CreateComment) => {

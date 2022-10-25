@@ -14,7 +14,7 @@ export const httpRegisterArticle = (data: CreateArticle) => {
   return pipe(
     data,
     registerArticleAdapter(createArticleInDB),
-    TE.mapLeft(err => getError(err.message)),
+    TE.mapLeft(err => getError({ errors: err.message, context: 'articlee' })),
   )
 }
 
@@ -22,6 +22,6 @@ export const httpAddCommentToAnArticle = (data: CreateComment) => {
   return pipe(
     data,
     addCommentToAnArticleAdapter(addCommentToAnArticleInDB),
-    TE.mapLeft(err => getError(err.message)),
+    TE.mapLeft(err => getError({ errors: err.message, context: 'comment' })),
   )
 }

@@ -1,7 +1,14 @@
-export const getError = (erros: string) => {
+type GetError = {
+  errors: string
+  context?: string
+}
+
+export const getError = ({ errors, context = 'no-context' } : GetError) => {
   return {
-    errors: {
-      body: erros.split(':::'),
+    [context]: {
+      errors: {
+        body: errors.split(':::'),
+      },
     },
   }
 }

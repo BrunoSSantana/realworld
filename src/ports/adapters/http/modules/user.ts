@@ -13,7 +13,7 @@ export const httpRegisterUser = (data: CreateUser) => {
   return pipe(
     data,
     registerUserAdapter(createUserInDB),
-    TE.mapLeft(err => getError(err.message)),
+    TE.mapLeft(err => getError({ errors: err.message, context: 'user' })),
   )
 }
 
@@ -23,6 +23,6 @@ export const httpLogin = (data: LoginUser) => {
       () => login(data),
       E.toError,
     ),
-    TE.mapLeft(error => getError(error.message)),
+    TE.mapLeft(error => getError({ errors: error.message, context: 'user' })),
   )
 }
