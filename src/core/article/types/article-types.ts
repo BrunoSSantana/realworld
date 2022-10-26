@@ -39,6 +39,7 @@ export type Articles = t.TypeOf<typeof articlesCodec>
 const authorIdCodec = withMessage(UUID, () => 'Invalid author ID')
 
 export type AuthorId = t.TypeOf<typeof authorIdCodec>
+export type AuthorIdOutPut = t.OutputOf<typeof authorIdCodec>
 
 export const createArticleRequired = t.type({
   title: withMessage(t.string, () => 'Invalid title'),
