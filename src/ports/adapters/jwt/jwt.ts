@@ -1,6 +1,9 @@
 import * as jwt from '@/ports/jwt/jose'
-import { JWTPayload } from 'jose'
+import { AuthorIdOutPut } from '@/core/article/types/article-types'
 
+export type JWTPayload = {
+  id: AuthorIdOutPut
+}
 export const generateToken = (...args: [JWTPayload, string?]) =>
   jwt.createJwt(...args)
 

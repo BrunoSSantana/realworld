@@ -27,6 +27,7 @@ export const createUserInDB: user.OutsideRegisterUser = async (data) => {
 }
 
 export type Login = (data: LoginUser) => Promise<{ user: UserOutput }>
+
 export const login: Login = async (data) => {
   const userData = await db.login(data)
 
@@ -40,6 +41,20 @@ export const login: Login = async (data) => {
       image: userData.image ?? '',
       token,
     },
+  }
+}
+
+export const getCurrentUser = async (userId: string) => {
+  const user = await db.getCurrentUserFromDB(userId)
+
+  if (!user) {
+    throw new Error('User does not exist')
+  }
+
+  return {
+    ...user,
+    bio: user.bio ?? undefined,
+    image: user.image ?? undefined,
   }
 }
 

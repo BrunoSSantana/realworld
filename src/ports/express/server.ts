@@ -35,7 +35,7 @@ const auth = async (req: express.Request, res: express.Response, next: express.N
 
 // ROUTES
 
-// public
+// user
 app.post('/api/users', async (req, res) => {
   return pipe(
     req.body.user,
@@ -55,7 +55,21 @@ app.post('/api/users/login', async (req, res) => {
   )()
 })
 
-// private
+app.post('/api/user', auth, async (_req, res) => {
+  const propUser = 'user'
+
+  const payload = res.locals[propUser] as any
+
+  const user = {
+    ...payload,
+  }
+
+  return pipe(
+    user,
+  )()
+})
+
+// article
 app.post('/api/articles', auth, async (req, res) => {
   const propUser = 'user'
   const idProp = 'id'

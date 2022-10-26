@@ -41,3 +41,8 @@ export const login: Login = async (data) => {
 
   return user
 }
+
+export const getCurrentUserFromDB = async (id: string) => {
+  const user = db.users[id]
+  return user ?? null
+}

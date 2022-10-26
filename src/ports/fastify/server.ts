@@ -7,7 +7,6 @@ import fastify, {
   RawServerDefault,
 } from 'fastify'
 import http from 'http'
-import { JWTPayload } from 'jose'
 
 import { pipe } from 'fp-ts/lib/function'
 import * as TE from 'fp-ts/lib/TaskEither'
@@ -20,7 +19,9 @@ import {
   ApiUserCreate,
   ApiUserLogin,
 } from '@/ports/fastify/types'
+
 import {
+  httpGetCurrentUser,
   httpLogin,
   httpRegisterUser,
 } from '@/ports/adapters/http/modules/user'
@@ -29,6 +30,7 @@ import {
   httpRegisterArticle,
 } from '@/ports/adapters/http/modules/article'
 import { getError, getToken } from '@/ports/adapters/http/http'
+import { JWTPayload } from '@/ports/adapters/jwt/jwt'
 
 import { AuthorId, CreateArticle } from '@/core/article/types/article-types'
 
@@ -53,7 +55,7 @@ const auth: AuthPreValidation = async (req, reply, done) => {
   try {
     const payload = await getToken(req.headers.authorization)
 
-    req.raw.auth = payload
+    req.raw.auth = payload as JWTPayload
     return done()
   } catch {
     return reply
@@ -86,6 +88,15 @@ app.post<ApiUserLogin>('/api/users/login', async (req, reply) => {
     TE.map((resultLogin) => reply.status(201).send(resultLogin)),
     TE.mapLeft((err) => reply.status(422).send(err)),
   )()
+})
+
+app.get<ApiUserLogin>('/api/user', authOptions, async (req, reply) => {
+  const payload = req.raw.auth as any
+  const token = req.headers.authorization?.split(' ')[1] ?? ''
+
+  const user = await httpGetCurrentUser(payload, token)
+
+  return reply.send(user)
 })
 
 // list
